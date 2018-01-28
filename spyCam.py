@@ -3,32 +3,25 @@
 #
 #  =================================================
 #   - Author jouke hijlkema <jouke.hijlkema@onera.fr>
-#   - ven. déc. 11:15 2017
+#   - ven. déc. 14:53 2017
 #   - Initial Version 1.0
 #  =================================================
-import sys
-sys.path.append("./Classes")
 
-import gi
-import time
+from zmqClient import zmqClient
+from cameraPipe import cameraPipe
 
-gi.require_version('Gst', '1.0')
-gi.require_version('GLib', '2.0')
-gi.require_version('Gtk', '3.0')
-
-from gi.repository import Gst
-from gi.repository import GLib
-from gi.repository import Gtk
-
-Gst.init([])
-Gtk.init([])
-
-from videoIn import videoIn
-from zmqServer import zmqServer
-
-com = zmqServer("Server","tcp://192.168.1.102:5002","tcp://192.168.1.102:5003")
+com = zmqClient("meteoCam","tcp://192.168.1.102:5003","tcp://192.168.1.102:5002")
 com.start()
 
-monitor = videoIn(com)
+cam = cameraPipe("192.168.1.102",5001)
 
-Gtk.main()
+cam.Play()
+
+while (1):
+    if com.receiveNb():
+        if com.got("ServerUp",True):
+            cam.Play()
+        if com.got("highRes",True):
+            cam.Conf("highRes")
+        if com.got("lowRes",True):
+            cam.Conf("lowRes")
