@@ -1,0 +1,11 @@
+[Unit]
+Description=my spycam application
+After=time-sync.target network-online.target
+Wants=time-sync.target network-online.target
+
+[Service]
+ExecStart=/home/pi/spyCam/spyCam.py
+
+[Install]
+WantedBy=multi-user.target
+
