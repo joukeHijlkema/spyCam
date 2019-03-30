@@ -6,6 +6,8 @@
 #   - ven. déc. 14:53 2017
 #   - Initial Version 1.0
 #  =================================================
+import sys
+sys.path.append("/home/pi/spyCam/Classes")
 
 from zmqClient import zmqClient
 from cameraPipe import cameraPipe
